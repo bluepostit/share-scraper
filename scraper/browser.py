@@ -2,13 +2,15 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
-class EagerBrowser(webdriver.Firefox):
+class ScraperBrowser(webdriver.Firefox):
     '''A wrapper to Selenium webdriver's Firefox browser class.
     This defaults to using the 'eager' page loading strategry,
     and to running headless.'''
-    def __init__(self):
+    def __init__(self, headless=True, eager=True):
         capabilities = DesiredCapabilities().FIREFOX
-        capabilities['pageLoadStrategy'] = 'eager'
         options = FirefoxOptions()
-        options.headless = True
+        if eager:
+            capabilities['pageLoadStrategy'] = 'eager'
+        if headless:
+            options.headless = True
         super().__init__(capabilities=capabilities, options=options)
