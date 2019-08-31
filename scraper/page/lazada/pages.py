@@ -21,9 +21,12 @@ class SearchPage(BasePage):
 
     SEARCH_RESULT_CSS_SELECTOR = 'div[data-qa-locator="product-item"]'
 
+    def wait_for_results_load(self):
+        return self.wait_for_css_selector(self.PAGE_LOADED_CSS_MARKER)
+
     def get_results(self):
         product_urls = []
-        loaded = self.wait_for_css_selector(self.PAGE_LOADED_CSS_MARKER)
+        loaded = self.wait_for_results_load()
 
         if loaded:
             products = self.browser.find_elements_by_css_selector(

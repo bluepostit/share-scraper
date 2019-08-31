@@ -28,7 +28,8 @@ class Page:
             )
             return True
         except TimeoutException:
-            print("timed out")
+            self.browser.save_screenshot('timed-out.png')
+            print("timed out. saved screenshot")
             return None
 
     def open_new_tab(self):
