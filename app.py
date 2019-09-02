@@ -1,7 +1,7 @@
 import random
 from flask import Flask
-from scraper.browser import ScraperBrowser
-from scraper.scraper.lazada import LazadaScraper
+# from scraper.browser import ScraperBrowser
+from scraper.scraper.lazada_simple import LazadaSimpleScraper
 
 app = Flask(__name__)
 
@@ -13,8 +13,8 @@ def main():
 def test_scraper():
     search_terms = ['ipod', 'handbag', 'Webcam logitech', 'Mp3 player']
     search_term = random.choice(search_terms)
-    browser = ScraperBrowser(headless=False)
-    scraper = LazadaScraper(browser)
+    # browser = ScraperBrowser()
+    scraper = LazadaSimpleScraper()
     results = scraper.get_brand_share(search_term, 100)
 
     # home_page = lazada.HomePage(browser)
@@ -30,7 +30,8 @@ def test_scraper():
     #     print(f"Brand: {brand}")
     #     product_page.close_tab()
 
-    browser.quit()
+    # browser.quit()
+    print(results)
 
     return str(results)
 
