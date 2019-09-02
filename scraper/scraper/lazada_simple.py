@@ -1,8 +1,8 @@
 from math import ceil
-import random
 import re
 import requests
 from .base import SimpleScraper
+
 
 class LazadaSimpleScraper(SimpleScraper):
     RESULTS_PER_PAGE = 40
@@ -16,38 +16,47 @@ class LazadaSimpleScraper(SimpleScraper):
         + '(KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36'
     ]
 
+    def set_scraper_api_key(self, key):
+        self.scraper_api_key = key
+        return self
+
+    def get_page_source(self, url):
+        params = {
+            'api_key': self.scraper_api_key,
+            'url': url
+        }
+        page = requests.get('http://api.scraperapi.com', params=params)
+        return page.text
+
     def get_brand_share(self, search_term, results_limit):
         base_url = self.SEARCH_URL.replace('##SEARCH_TERM##', search_term)
         amt_pages = ceil(results_limit / self.RESULTS_PER_PAGE)
         print(f"pages to load: {amt_pages}")
 
         brands = []
-        with requests.session() as session:
-            headers = {
-                'User-Agent': random.choice(self.USER_AGENTS)
-            }
-            # First page
-            print("loading first page")
-            print(base_url)
-            page = session.get(base_url, headers=headers)
-            brands += self.get_brands(page.text)
-            f = open(f"{search_term.replace(' ', '_')}-out.html", 'w')
-            f.write(page.text)
 
-            # Additional pages
-            for i in range(1, amt_pages):
-                print(f"loading page {i + 1}")
-                url = f"{base_url}&page={i + 1}"
-                print(url)
-                page = session.get(url, headers=headers)
+        # First page
+        print(f"loading first page: {base_url}")
 
-                f = open(f"{search_term.replace(' ', '_')}-{i + 1}-out.html", 'w')
-                f.write(page.text)
+        page_text = self.get_page_source(base_url)
+        brands += self.get_brands(page_text)
+        # f = open(f"{search_term.replace(' ', '_')}-out.html", 'w')
+        # f.write(page_text)
 
-                page_brands = self.get_brands(page.text)
-                print(f"found {len(page_brands)} brands on page")
+        # Additional pages
+        for i in range(1, amt_pages):
+            url = f"{base_url}&page={i + 1}"
+            print(f"loading page {i + 1}: {url}")
+            page_text = self.get_page_source(url)
 
-        return brands
+            # f = open(f"{search_term.replace(' ', '_')}-{i + 1}-out.html", 'w')
+            # f.write(page_text)
+
+            page_brands = self.get_brands(page_text)
+            print(f"found {len(page_brands)} brands on page")
+            brands += page_brands
+
+        return brands[:results_limit]
 
     def get_brands(self, html):
         regex = re.compile('"brandName":"([^"]+)"')
