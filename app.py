@@ -1,5 +1,5 @@
 import random
-from flask import Flask
+from flask import Flask, current_app
 from flask import jsonify
 # from scraper.browser import ScraperBrowser
 from scraper.scraper.lazada_simple import LazadaSimpleScraper
@@ -10,7 +10,7 @@ app.config.from_pyfile('app.cfg')
 
 @app.route('/')
 def main():
-    return '<div>Click <a href="/test/">here</a> to test the scraper</div>'
+    return current_app.send_static_file('index.html')
 
 
 @app.route('/test/')
