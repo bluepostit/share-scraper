@@ -12,19 +12,6 @@
     # Now install pip for python3.7
     python3.7 -m pip install pip
     ```
-1. Install the [Gecko driver](https://github.com/mozilla/geckodriver) on your server
-by running the following [instructions](https://askubuntu.com/a/863211) (for Ubuntu):
-
-    ```bash
-    export GECKO_DRIVER_VERSION='v0.24.0'
-    wget https://github.com/mozilla/geckodriver/releases/download/$GECKO_DRIVER_VERSION/geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz
-    tar -xvzf geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz
-    rm geckodriver-$GECKO_DRIVER_VERSION-linux64.tar.gz
-    chmod +x geckodriver
-    sudo cp geckodriver /usr/local/bin/
-    rm geckodriver
-
-    ```
 1. Install the project's dependencies (instructions for Ubuntu):
 
     ```bash
