@@ -13,26 +13,10 @@ def main():
 def test_scraper():
     search_terms = ['ipod', 'handbag', 'Webcam logitech', 'Mp3 player']
     search_term = random.choice(search_terms)
-    # browser = ScraperBrowser()
     scraper = LazadaSimpleScraper()
     results = scraper.get_brand_share(search_term, 100)
 
-    # home_page = lazada.HomePage(browser)
-    # home_page.load().search(search_term)
-
-    # search_page = lazada.SearchPage(browser)
-    # results = search_page.get_results()
-
-    # for result in results[0:4]:
-    #     product_page = lazada.ProductPage(browser)
-    #     product_page.open_new_tab().load(result)
-    #     brand = product_page.get_brand()
-    #     print(f"Brand: {brand}")
-    #     product_page.close_tab()
-
-    # browser.quit()
-    print(results)
+    print(f"Found {len(results)} results.")
 
     return str(results)
 
-    # return f"Found {len(results)} results."
