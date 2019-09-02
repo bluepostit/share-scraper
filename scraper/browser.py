@@ -14,3 +14,7 @@ class ScraperBrowser(webdriver.Firefox):
         if headless:
             options.headless = True
         super().__init__(capabilities=capabilities, options=options)
+
+    def get(self, url):
+        print(f"get({url})")
+        return super().get(url)

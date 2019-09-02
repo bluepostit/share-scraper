@@ -12,26 +12,44 @@ class LazadaScraper(Scraper):
 
         home_page = HomePage(self.browser)
         home_page.load().search(search_term)
-        self._wait_for_search_results(self.browser)
         print("searched!")
 
+        # First page
+        search_page = SearchPage(self.browser)
+        self._wait_for_search_results(self.browser)
         base_url = self.browser.current_url
-        search_urls = [base_url]
-        for i in range(1, amt_pages):
-            search_urls.append(f"{base_url}&page={i + 1}")
+        brands = self.get_brands(search_page)
 
-        print("search page urls:")
+        # Additional pages
+        for i in range(1, amt_pages):
+            url = f"{base_url}&page={i + 1}"
+            self.browser.get(url)
+            search_page = SearchPage(self.browser)
+            self._wait_for_search_results(self.browser)
+            brands += self.get_brands(search_page)
+
+
+        # page_results = search_page.get_results()
+        # results += page_results
+
+
+        # base_url = self.browser.current_url
+        # search_urls = [base_url]
+        # for i in range(1, amt_pages):
+        #     search_urls.append(f"{base_url}&page={i + 1}")
+
+        # print("search page urls:")
         # [print(url) for url in search_urls]
 
-        eager_browser = self.browser
-        for url in search_urls:
-            eager_browser.get(url)
-            search_page = SearchPage(eager_browser)
-            page_results = search_page.get_results()
-            results += page_results
+        # eager_browser = self.browser
+        # for url in search_urls:
+        #     self.browser.get(url)
+        #     search_page = SearchPage(self.browser)
+        #     page_results = search_page.get_results()
+        #     results += page_results
 
-        print("search result urls:")
-        print(results)
+        # print("search result urls:")
+        # print(results)
 
         # for result in results[0:4]:
         #     product_page = ProductPage(self.browser)
@@ -40,7 +58,20 @@ class LazadaScraper(Scraper):
         #     print(f"Brand: {brand}")
         #     product_page.close_tab()
 
-        return [1, 2, 3]
+        return brands
+
+    def get_brands(self, search_page):
+        brands = []
+        page_results = search_page.get_results()
+        for result in page_results:
+            product_page = ProductPage(self.browser)
+            product_page.open_new_tab().load(result)
+            brand = product_page.get_brand()
+            print(f"Brand: {brand}")
+            product_page.close_tab()
+            brands.append(brand)
+        return brands
+
 
     def _wait_for_search_results(self, browser):
         search_page = SearchPage(browser)
