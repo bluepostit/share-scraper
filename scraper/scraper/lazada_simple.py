@@ -16,10 +16,6 @@ class LazadaSimpleScraper(SimpleScraper):
         + '(KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36'
     ]
 
-    def set_scraper_api_key(self, key):
-        self.scraper_api_key = key
-        return self
-
     def get_page_source(self, url):
         params = {
             'api_key': self.scraper_api_key,
@@ -28,7 +24,7 @@ class LazadaSimpleScraper(SimpleScraper):
         page = requests.get('http://api.scraperapi.com', params=params)
         return page.text
 
-    def get_brand_share(self, search_term, results_limit):
+    def get_brand_shares(self, search_term, results_limit):
         base_url = self.SEARCH_URL.replace('##SEARCH_TERM##', search_term)
         amt_pages = ceil(results_limit / self.RESULTS_PER_PAGE)
         print(f"pages to load: {amt_pages}")
@@ -56,7 +52,7 @@ class LazadaSimpleScraper(SimpleScraper):
             print(f"found {len(page_brands)} brands on page")
             brands += page_brands
 
-        return brands[:results_limit]
+        return self._get_brands_as_shares(brands[:results_limit])
 
     def get_brands(self, html):
         regex = re.compile('"brandName":"([^"]+)"')
