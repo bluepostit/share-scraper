@@ -6,11 +6,6 @@ class SimpleScraper:
         self.scraper_api_key = key
         return self
 
-
-class Scraper(SimpleScraper):
-    def __init__(self, browser):
-        self.browser = browser
-
     def _get_brands_as_shares(self, brands):
         shares = {}
         for brand in brands:
@@ -19,3 +14,7 @@ class Scraper(SimpleScraper):
             else:
                 shares[brand] = 1
         return shares
+
+class Scraper(SimpleScraper):
+    def __init__(self, browser):
+        self.browser = browser
