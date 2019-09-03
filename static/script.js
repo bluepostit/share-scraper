@@ -5,7 +5,8 @@ function fetchBrandShareData(searchTerm) {
   .then((json) => {
     console.log(json);
     let chartData = buildChartData(json);
-    let title = `Brand shares for "${json.searchTerm}"`
+    let count = json.resultsCount;
+    let title = `Brand shares for "${json.searchTerm}" (top ${count} results)`
     showDataInChart(chartData, title);
   });
 }
@@ -16,8 +17,8 @@ function buildChartData(data) {
     datasets: []
   };
   backgroundColors = [
-  'rgba(54, 162, 235, 0.2)',
-  'rgba(75, 192, 192, 0.2)'
+  'rgba(54, 162, 235, 0.9)',
+  'rgba(75, 192, 192, 0.9)'
   ];
   borderColors = [
   'rgba(54, 162, 235, 1)',
@@ -70,8 +71,7 @@ const setupFormListener = () => {
 const setupChartConfig = () => {
   Chart.scaleService.updateScaleDefaults('linear', {
     ticks: {
-      min: 0,
-      max: 100
+      min: 0
     }
   });
 };
