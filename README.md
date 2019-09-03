@@ -1,6 +1,6 @@
-#Share Scraper#
+# Share Scraper
 
-##Installation##
+## Installation
 1. Clone this project.
 1. Install Python 3.7 and `pip` for Python 3.7:
 
@@ -25,5 +25,13 @@
     source ./env/bin/activate
     # Install the project's requirements
     python3.7 -m pip install -r requirements.txt
+    # Create a config file to store your scraper-api key
+    cp app.cfg.template app.cfg
     ```
+    In ```app.cfg```, replace ```your-key-here``` with your own scraper-api key.
 
+1. Run the project
+
+    ```bash
+    ./run-server.sh
+    ```
