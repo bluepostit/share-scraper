@@ -16,9 +16,23 @@ def main():
 @app.route('/search/')
 def search():
     search_term = request.args.get('term')
-    scraper_api_key = app.config['SCRAPERAPI_KEY']
-    scraper = LazadaSimpleScraper().set_scraper_api_key(scraper_api_key)
-    shares = scraper.get_brand_shares(search_term, 100)
+    # scraper_api_key = app.config['SCRAPERAPI_KEY']
+    # scraper = LazadaSimpleScraper().set_scraper_api_key(scraper_api_key)
+    # shares = scraper.get_brand_shares(search_term, 100)
+    shares = {
+        'searchTerm': search_term,
+        'brands': ['A', 'B', 'C', 'D'],
+        'shares': [
+            {
+                'provider': 'lazada',
+                'shares': [20, 10, 60, 10]
+            },
+            {
+                'provider': 'other',
+                'shares': [10, 40, 30, 20]
+            }
+        ]
+    }
     return jsonify(shares)
 
 
